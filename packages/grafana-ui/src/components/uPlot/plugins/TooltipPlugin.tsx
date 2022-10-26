@@ -198,19 +198,20 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
       xVal = xFieldFmt(xField!.values.get(dataIdx)).text;
       const fieldFmt = field.display || getDisplayProcessor({ field, timeZone, theme });
       const display = fieldFmt(field.values.get(dataIdx));
+      let series: SeriesTableRowProps[] = [];
+      series.push({
+        color: display.color || FALLBACK_COLOR,
+        label: getFieldDisplayName(field, otherProps.data, otherProps.frames),
+        value: display ? formattedValueToString(display) : null,
+      });
 
-      tooltip = (
-        <SeriesTable
-          series={[
-            {
-              color: display.color || FALLBACK_COLOR,
-              label: getFieldDisplayName(field, otherProps.data, otherProps.frames),
-              value: display ? formattedValueToString(display) : null,
-            },
-          ]}
-          timestamp={xVal}
-        />
-      );
+      for (let [label, labelVal] of Object.entries(field.labels)) {
+        series.push({
+          label: `${label}: ${labelVal}`,
+        });
+      }
+
+      tooltip = <SeriesTable series={series} timestamp={xVal} />;
     }
 
     if (mode === TooltipDisplayMode.Multi) {
