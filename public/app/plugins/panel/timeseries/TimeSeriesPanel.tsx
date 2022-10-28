@@ -86,6 +86,8 @@ export const TimeSeriesPanel: React.FC<TimeSeriesPanelProps> = ({
                 config={config}
                 mode={options.tooltip.mode}
                 sortOrder={options.tooltip.sort}
+                showLabelList={options.tooltip.showLabels}
+                shownLabels={options.tooltip.labels}
                 sync={sync}
                 timeZone={timeZone}
               />

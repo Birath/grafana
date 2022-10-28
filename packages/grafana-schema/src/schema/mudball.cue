@@ -264,4 +264,6 @@ TableFieldOptions: {
 VizTooltipOptions: {
 	mode: TooltipDisplayMode
 	sort: SortOrder
+	showLabels?: bool
+	labels?: [...string]
 } @cuetsy(kind="interface")

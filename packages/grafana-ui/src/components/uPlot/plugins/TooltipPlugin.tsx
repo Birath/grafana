@@ -29,6 +29,8 @@ interface TooltipPluginProps {
   config: UPlotConfigBuilder;
   mode?: TooltipDisplayMode;
   sortOrder?: SortOrder;
+  showLabelList?: boolean;
+  shownLabels?: readonly string[];
   sync?: () => DashboardCursorSync;
   // Allows custom tooltip content rendering. Exposes aligned data frame with relevant indexes for data inspection
   // Use field.state.origin indexes from alignedData frame field to get access to original data frame and field index.
@@ -43,6 +45,8 @@ const TOOLTIP_OFFSET = 10;
 export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
   mode = TooltipDisplayMode.Single,
   sortOrder = SortOrder.None,
+  showLabelList = false,
+  shownLabels = [],
   sync,
   timeZone,
   config,
@@ -201,14 +205,17 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
       let series: SeriesTableRowProps[] = [];
       series.push({
         color: display.color || FALLBACK_COLOR,
-        label: getFieldDisplayName(field, otherProps.data, otherProps.frames),
+        label: getFieldDisplayName(field, otherProps.data, otherProps.frames, !showLabelList),
         value: display ? formattedValueToString(display) : null,
       });
-
-      for (let [label, labelVal] of Object.entries(field.labels)) {
-        series.push({
-          label: `${label}: ${labelVal}`,
-        });
+      if (showLabelList) {
+        for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
+          if (shownLabels.includes(label)) {
+            series.push({
+              label: `${label}: ${labelVal}`,
+            });
+          }
+        }
       }
 
       tooltip = <SeriesTable series={series} timestamp={xVal} />;
@@ -219,6 +226,7 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
       const frame = otherProps.data;
       const fields = frame.fields;
       const sortIdx: unknown[] = [];
+      const labels = new Set<string>();
 
       for (let i = 0; i < fields.length; i++) {
         const field = frame.fields[i];
@@ -239,10 +247,17 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
         sortIdx.push(v);
         series.push({
           color: display.color || FALLBACK_COLOR,
-          label: getFieldDisplayName(field, frame, otherProps.frames),
+          label: getFieldDisplayName(field, frame, otherProps.frames, !showLabelList),
           value: display ? formattedValueToString(display) : null,
           isActive: focusedSeriesIdx === i,
         });
+        if (showLabelList) {
+          for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
+            if (shownLabels.includes(label)) {
+              labels.add(`${label}: ${labelVal}`);
+            }
+          }
+        }
       }
 
       if (sortOrder !== SortOrder.None) {
@@ -255,6 +270,13 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
           const aIdx = sortRef.indexOf(a);
           const bIdx = sortRef.indexOf(b);
           return sortFn(sortIdx[aIdx], sortIdx[bIdx]);
+        });
+      }
+
+      for (const label of labels) {
+        series.push({
+          color: 'transparent',
+          label: label,
         });
       }
 

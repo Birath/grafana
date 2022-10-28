@@ -496,6 +496,12 @@ export const defaultTableFieldOptions: Partial<TableFieldOptions> = {
  * TODO docs
  */
 export interface VizTooltipOptions {
+  labels?: Array<string>;
   mode: TooltipDisplayMode;
+  showLabels?: boolean;
   sort: SortOrder;
 }
+
+export const defaultVizTooltipOptions: Partial<VizTooltipOptions> = {
+  labels: [],
+};

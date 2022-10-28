@@ -305,6 +305,7 @@ type UPlotConfigPrepOpts<T extends Record<string, any> = {}> = {
   renderers?: Renderers;
   tweakScale?: (opts: ScaleProps, forField: Field) => ScaleProps;
   tweakAxis?: (opts: AxisProps, forField: Field) => AxisProps;
+  includeLabels: boolean;
 } & T;
 
 /** @alpha */
