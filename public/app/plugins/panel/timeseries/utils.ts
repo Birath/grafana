@@ -98,6 +98,16 @@ export function prepareGraphableFields(
 
           fields.push(copy);
           break;
+        default:
+          if (field.config.custom.labels.includes(field.name)) {
+            for (const f of nullToValue(nulledFrame).fields) {
+              f.config.custom.metadata = field;
+            }
+            for (const f of fields) {
+              f.config.custom.metadata = field;
+            }
+          }
+          break;
       }
     }
 

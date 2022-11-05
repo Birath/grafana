@@ -91,6 +91,14 @@ export const selectOverrideProcessor = (
   return value;
 };
 
+export const fieldNamePickerOverrideProcessor = (
+  value: string,
+  _context: FieldOverrideContext,
+  _settings?: FieldNamePickerConfigSettings
+) => {
+  return value;
+};
+
 export interface StringFieldConfigSettings {
   placeholder?: string;
   maxLength?: number;

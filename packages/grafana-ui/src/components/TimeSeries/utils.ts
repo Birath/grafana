@@ -57,7 +57,6 @@ export const preparePlotConfigBuilder: UPlotConfigPrepFn<{
   renderers,
   tweakScale = (opts) => opts,
   tweakAxis = (opts) => opts,
-  includeLabels,
 }) => {
   const builder = new UPlotConfigBuilder(timeZones[0]);
 
@@ -357,13 +356,13 @@ export const preparePlotConfigBuilder: UPlotConfigPrepFn<{
 
     if (field.state?.origin) {
       if (!indexByName) {
-        indexByName = getNamesToFieldIndex(frame, allFrames, includeLabels);
+        indexByName = getNamesToFieldIndex(frame, allFrames);
       }
 
       const originFrame = allFrames[field.state.origin.frameIndex];
       const originField = originFrame?.fields[field.state.origin.fieldIndex];
 
-      const dispName = getFieldDisplayName(originField ?? field, originFrame, allFrames, includeLabels);
+      const dispName = getFieldDisplayName(originField ?? field, originFrame, allFrames);
 
       // disable default renderers
       if (customRenderedFields.indexOf(dispName) >= 0) {
@@ -626,18 +625,14 @@ export const preparePlotConfigBuilder: UPlotConfigPrepFn<{
   return builder;
 };
 
-export function getNamesToFieldIndex(
-  frame: DataFrame,
-  allFrames: DataFrame[],
-  includeLabels = true
-): Map<string, number> {
+export function getNamesToFieldIndex(frame: DataFrame, allFrames: DataFrame[]): Map<string, number> {
   const originNames = new Map<string, number>();
   frame.fields.forEach((field, i) => {
     const origin = field.state?.origin;
     if (origin) {
       const origField = allFrames[origin.frameIndex]?.fields[origin.fieldIndex];
       if (origField) {
-        originNames.set(getFieldDisplayName(origField, allFrames[origin.frameIndex], allFrames, includeLabels), i);
+        originNames.set(getFieldDisplayName(origField, allFrames[origin.frameIndex], allFrames), i);
       }
     }
   });

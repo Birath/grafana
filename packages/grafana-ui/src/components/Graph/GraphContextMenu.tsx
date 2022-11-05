@@ -14,6 +14,7 @@ import {
 import { useStyles2 } from '../../themes';
 import { ContextMenu, ContextMenuProps } from '../ContextMenu/ContextMenu';
 import { FormattedValueDisplay } from '../FormattedValueDisplay/FormattedValueDisplay';
+import { JSONFormatter } from '../JSONFormatter/JSONFormatter';
 import { HorizontalGroup } from '../Layout/Layout';
 import { MenuGroup, MenuGroupProps } from '../Menu/MenuGroup';
 import { MenuItem } from '../Menu/MenuItem';
@@ -78,6 +79,7 @@ export const GraphContextMenu: React.FC<GraphContextMenuProps> = ({
         seriesColor={source.series.color}
         displayName={source.series.alias || source.series.label}
         displayValue={value}
+        labels={source.series}
       />
     );
   };
@@ -108,11 +110,13 @@ export const GraphContextMenuHeader = ({
   seriesColor,
   displayName,
   displayValue,
+  labels,
 }: {
   timestamp: string;
   seriesColor: string;
   displayName: string;
   displayValue: FormattedValue;
+  labels?: string[];
 }) => {
   const styles = useStyles2(getStyles);
 
@@ -126,6 +130,21 @@ export const GraphContextMenuHeader = ({
         </div>
         {displayValue && <FormattedValueDisplay value={displayValue} />}
       </HorizontalGroup>
+      <div onClick={(e) => e.stopPropagation()}>
+        {labels?.map((label, i) => {
+          return <JSONFormatter key={i} json={JSON.parse(label)} />;
+          //return  (<JSONFormatter key={i} open={2} json={JSON.parse(`{
+          //   "version": "2.0.0",
+          //   "tasks": [
+          //       {
+          //           "label": "echo",
+          //           "type": "shell",
+          //           "command": "echo Hello"
+          //         }
+          //       ]
+          //     }`)}/>)
+        })}
+      </div>
     </div>
   );
 };

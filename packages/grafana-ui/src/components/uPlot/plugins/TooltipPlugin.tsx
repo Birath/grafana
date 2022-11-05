@@ -29,8 +29,6 @@ interface TooltipPluginProps {
   config: UPlotConfigBuilder;
   mode?: TooltipDisplayMode;
   sortOrder?: SortOrder;
-  showLabelList?: boolean;
-  shownLabels?: readonly string[];
   sync?: () => DashboardCursorSync;
   // Allows custom tooltip content rendering. Exposes aligned data frame with relevant indexes for data inspection
   // Use field.state.origin indexes from alignedData frame field to get access to original data frame and field index.
@@ -45,8 +43,6 @@ const TOOLTIP_OFFSET = 10;
 export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
   mode = TooltipDisplayMode.Single,
   sortOrder = SortOrder.None,
-  showLabelList = false,
-  shownLabels = [],
   sync,
   timeZone,
   config,
@@ -205,12 +201,12 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
       let series: SeriesTableRowProps[] = [];
       series.push({
         color: display.color || FALLBACK_COLOR,
-        label: getFieldDisplayName(field, otherProps.data, otherProps.frames, !showLabelList),
+        label: getFieldDisplayName(field, otherProps.data, otherProps.frames),
         value: display ? formattedValueToString(display) : null,
       });
-      if (showLabelList) {
+      if (field.config.custom.showLabels) {
         for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
-          if (shownLabels.includes(label)) {
+          if (field.config.custom.labels.includes(label)) {
             series.push({
               label: `${label}: ${labelVal}`,
             });
@@ -247,13 +243,13 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
         sortIdx.push(v);
         series.push({
           color: display.color || FALLBACK_COLOR,
-          label: getFieldDisplayName(field, frame, otherProps.frames, !showLabelList),
+          label: getFieldDisplayName(field, frame, otherProps.frames),
           value: display ? formattedValueToString(display) : null,
           isActive: focusedSeriesIdx === i,
         });
-        if (showLabelList) {
+        if (field.config.custom.showLabels) {
           for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
-            if (shownLabels.includes(label)) {
+            if (field.config.custom.labels.includes(label)) {
               labels.add(`${label}: ${labelVal}`);
             }
           }

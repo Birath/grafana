@@ -34,7 +34,6 @@ export class UnthemedTimeSeries extends Component<TimeSeriesProps> {
       renderers,
       tweakScale,
       tweakAxis,
-      includeLabels,
     });
   };
 

@@ -36,12 +36,7 @@ export function getFrameDisplayName(frame: DataFrame, index?: number) {
   return `Series (${index})`;
 }
 
-export function getFieldDisplayName(
-  field: Field,
-  frame?: DataFrame,
-  allFrames?: DataFrame[],
-  includeLabels = true
-): string {
+export function getFieldDisplayName(field: Field, frame?: DataFrame, allFrames?: DataFrame[]): string {
   const existingTitle = field.state?.displayName;
   const multipleFrames = Boolean(allFrames && allFrames.length > 1);
 
@@ -49,7 +44,7 @@ export function getFieldDisplayName(
     return existingTitle;
   }
 
-  const displayName = calculateFieldDisplayName(field, frame, allFrames, (includeLabels = includeLabels));
+  const displayName = calculateFieldDisplayName(field, frame, allFrames);
   field.state = field.state || {};
   field.state.displayName = displayName;
   field.state.multipleFrames = multipleFrames;
@@ -60,12 +55,7 @@ export function getFieldDisplayName(
 /**
  * Get an appropriate display name. If the 'displayName' field config is set, use that.
  */
-function calculateFieldDisplayName(
-  field: Field,
-  frame?: DataFrame,
-  allFrames?: DataFrame[],
-  includeLabels = true
-): string {
+function calculateFieldDisplayName(field: Field, frame?: DataFrame, allFrames?: DataFrame[]): string {
   const hasConfigTitle = field.config?.displayName && field.config?.displayName.length;
 
   let displayName = hasConfigTitle ? field.config!.displayName! : field.name;
@@ -110,7 +100,7 @@ function calculateFieldDisplayName(
     parts.push(field.name);
   }
 
-  if (includeLabels && field.labels && frame) {
+  if ((!field.config?.custom?.showLabels ?? true) && field.labels && frame) {
     let singleLabelName = getSingleLabelName(allFrames ?? [frame]);
 
     if (!singleLabelName) {

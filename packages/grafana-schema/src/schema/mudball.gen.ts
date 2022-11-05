@@ -441,9 +441,15 @@ export enum SortOrder {
 export interface GraphFieldConfig extends LineConfig, FillConfig, PointsConfig, AxisConfig, BarConfig, StackableFieldConfig, HideableFieldConfig {
   drawStyle?: GraphDrawStyle;
   gradientMode?: GraphGradientMode;
+  labels?: Array<string>;
+  showLabels?: boolean;
   thresholdsStyle?: GraphThresholdsStyleConfig;
   transform?: GraphTransform;
 }
+
+export const defaultGraphFieldConfig: Partial<GraphFieldConfig> = {
+  labels: [],
+};
 
 /**
  * TODO docs

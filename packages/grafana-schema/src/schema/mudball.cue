@@ -231,6 +231,8 @@ GraphFieldConfig: {
 	gradientMode?:    GraphGradientMode
 	thresholdsStyle?: GraphThresholdsStyleConfig
 	transform?:       GraphTransform
+	showLabels?:      bool
+	labels?: 		  [...string]
 } @cuetsy(kind="interface")
 
 // TODO docs
