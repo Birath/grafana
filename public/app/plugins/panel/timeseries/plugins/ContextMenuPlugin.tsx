@@ -2,7 +2,14 @@ import { css as cssCore, Global } from '@emotion/react';
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 
-import { CartesianCoords2D, DataFrame, getFieldDisplayName, InterpolateFunction, TimeZone } from '@grafana/data';
+import {
+  CartesianCoords2D,
+  DataFrame,
+  FormattedValue,
+  getFieldDisplayName,
+  InterpolateFunction,
+  TimeZone,
+} from '@grafana/data';
 import {
   ContextMenu,
   GraphContextMenuHeader,
@@ -247,18 +254,14 @@ export const ContextMenuView: React.FC<ContextMenuViewProps> = ({
 
       const displayValue = field.display!(field.values.get(dataIdx));
 
-      const extra_field = data.fields.find((f) => field.config.custom.labels.includes(f.name));
-
-      const labels: string[] = [];
-      if (extra_field) {
-        labels.push(`${extra_field?.values.get(dataIdx)}`);
-
-        // for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
-        //   const shownLabels: string[] = field.config.custom?.labels;
-        //   if (shownLabels?.includes(label) ?? false) {
-        //     labels.push(`${extra_field?.name}: ${extra_field?.values.get(dataIdx)}`);
-        //   }
-        // }
+      const metadataFields: FormattedValue[] = [];
+      for (const metaDataField of data.metadataFields ?? []) {
+        if (field.config.custom.metadataFields?.includes(metaDataField.name)) {
+          metadataFields?.push({
+            prefix: metaDataField.name,
+            text: metaDataField.values.get(dataIdx),
+          });
+        }
       }
 
       const hasLinks = field.config.links && field.config.links.length > 0;
@@ -291,7 +294,7 @@ export const ContextMenuView: React.FC<ContextMenuViewProps> = ({
           displayValue={displayValue}
           seriesColor={displayValue.color!}
           displayName={getFieldDisplayName(field, data, otherProps.frames)}
-          labels={labels}
+          metadataFields={metadataFields}
         />
       );
     }

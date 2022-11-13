@@ -204,13 +204,11 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
         label: getFieldDisplayName(field, otherProps.data, otherProps.frames),
         value: display ? formattedValueToString(display) : null,
       });
-      if (field.config.custom.showLabels) {
-        for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
-          if (field.config.custom.labels.includes(label)) {
-            series.push({
-              label: `${label}: ${labelVal}`,
-            });
-          }
+      if (field.config.custom.showMetadata) {
+        for (const metadataField of otherProps.data.metadataFields ?? []) {
+          series.push({
+            label: metadataField.values.get(focusedSeriesIdx)!,
+          });
         }
       }
 
@@ -247,11 +245,9 @@ export const TooltipPlugin: React.FC<TooltipPluginProps> = ({
           value: display ? formattedValueToString(display) : null,
           isActive: focusedSeriesIdx === i,
         });
-        if (field.config.custom.showLabels) {
-          for (let [label, labelVal] of Object.entries(field.labels ?? {})) {
-            if (field.config.custom.labels.includes(label)) {
-              labels.add(`${label}: ${labelVal}`);
-            }
+        if (field.config.custom.showMetadata) {
+          for (const metadataField of frame.metadataFields ?? []) {
+            labels.add(metadataField.values.get(focusedPointIdxs[i]!));
           }
         }
       }

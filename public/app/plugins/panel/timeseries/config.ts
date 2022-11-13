@@ -1,7 +1,6 @@
 import {
   FieldColorModeId,
   FieldConfigProperty,
-  FieldOverrideContext,
   FieldType,
   identityOverrideProcessor,
   SetFieldConfigOptionsArgs,
@@ -223,56 +222,16 @@ export function getGraphFieldConfig(cfg: GraphFieldConfig): SetFieldConfigOption
 
       builder
         .addBooleanSwitch({
-          path: 'showLabels',
-          name: 'Show labels',
-          category: ['Labels'],
+          path: 'showMetadata',
+          name: 'Show metadata',
+          category: ['Metadata'],
           defaultValue: false,
         })
-        // .addMultiSelect({
-        //   path: 'labels',
-        //   name: 'Shown labels',
-        //   category: ['Labels'],
-        //   showIf: (c) => c.showLabels === true,
-        //   settings: {
-        //     allowCustomValue: true,
-        //     options: [],
-        //     getOptions: async (context: FieldOverrideContext) => {
-        //       const labels = new Set<string>();
-        //       if (context && context.data && context.data.length > 0) {
-        //         // Seems to happen when you apply any kind of transformation
-        //         if (context.data.length === 1) {
-        //           const fields = context.data[0].fields;
-        //           for (const field of fields) {
-        //             for (const [label, _] of Object.entries(field.labels ?? {})) {
-        //               labels.add(label);
-        //             }
-        //           }
-        //         } else {
-        //           const seenNames: string[] = [];
-        //           const frames = context.data.filter((f) => {
-        //             if (f.name && !seenNames.includes(f.name)) {
-        //               seenNames.push(f.name);
-        //               return true;
-        //             }
-        //             return false;
-        //           });
-        //           for (const frame of frames) {
-        //             for (const field of frame.fields) {
-        //               for (const [label, _] of Object.entries(field.labels ?? {})) {
-        //                 labels.add(label);
-        //               }
-        //             }
-        //           }
-        //         }
-        //       }
-        //       return Array.from(labels).map((label) => ({ value: label, label: label }));
-        //     },
-        //   },
-        // })
-        .addFieldNamePicker({
-          path: 'labels',
-          name: 'Shown labels',
-          category: ['Labels'],
+        .addMultiFieldNamePicker({
+          path: 'metadataFields',
+          name: 'Metadata fields',
+          category: ['Metadata'],
+          showIf: (currentOptions, data?) => currentOptions?.showMetadata ?? false,
         });
     },
   };

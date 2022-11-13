@@ -200,7 +200,7 @@ export interface NumericRange {
 export interface DataFrame extends QueryResultBase {
   name?: string;
   fields: Field[]; // All fields of equal length
-
+  metadataFields?: Field[];
   // The number of rows
   length: number;
 }

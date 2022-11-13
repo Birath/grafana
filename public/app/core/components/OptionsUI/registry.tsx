@@ -27,7 +27,7 @@ import {
   FieldNamePickerConfigSettings,
 } from '@grafana/data';
 import { RadioButtonGroup, TimeZonePicker, Switch } from '@grafana/ui';
-import { FieldNamePicker } from '@grafana/ui/src/components/MatchersUI/FieldNamePicker';
+import { FieldNamePicker, MultiFieldNamePicker } from '@grafana/ui/src/components/MatchersUI/FieldNamePicker';
 import { ThresholdsValueEditor } from 'app/features/dimensions/editors/ThresholdsEditor/thresholds';
 import { ValueMappingsEditor } from 'app/features/dimensions/editors/ValueMappingsEditor/ValueMappingsEditor';
 
@@ -160,6 +160,13 @@ export const getAllOptionEditors = () => {
     editor: FieldNamePicker as any,
   };
 
+  const multiFieldName: StandardEditorsRegistryItem<string[], FieldNamePickerConfigSettings> = {
+    id: 'multi-field-name',
+    name: 'Field name',
+    description: 'Allows selecting a field name from a data frame',
+    editor: MultiFieldNamePicker as any,
+  };
+
   const dashboardPicker: StandardEditorsRegistryItem<string, DashboardPickerOptions> = {
     id: 'dashboard-uid',
     name: 'Dashboard',
@@ -197,6 +204,7 @@ export const getAllOptionEditors = () => {
     color,
     multiSelect,
     fieldName,
+    multiFieldName,
     dashboardPicker,
     mappings,
     thresholds,

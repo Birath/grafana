@@ -20,9 +20,8 @@ export class UnthemedTimeSeries extends Component<TimeSeriesProps> {
 
   prepConfig = (alignedFrame: DataFrame, allFrames: DataFrame[], getTimeRange: () => TimeRange) => {
     const { eventBus, sync } = this.context as PanelContext;
-    const { theme, timeZone, renderers, tweakAxis, tweakScale, options } = this.props;
+    const { theme, timeZone, renderers, tweakAxis, tweakScale } = this.props;
     // TODO Do this in cleaner way.
-    const includeLabels = !options?.tooltip?.showLabels ?? true;
     return preparePlotConfigBuilder({
       frame: alignedFrame,
       theme,

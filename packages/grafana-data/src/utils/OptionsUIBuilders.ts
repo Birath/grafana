@@ -143,6 +143,20 @@ export class FieldConfigEditorBuilder<TOptions> extends OptionsUIRegistryBuilder
       settings: config.settings || {},
     });
   }
+
+  addMultiFieldNamePicker<TSettings = any>(
+    config: FieldConfigEditorConfig<TOptions, TSettings & FieldNamePickerConfigSettings, string[]>
+  ): this {
+    return this.addCustomEditor({
+      ...config,
+      id: config.path,
+      editor: standardEditorsRegistry.get('multi-field-name').editor as any,
+      override: standardEditorsRegistry.get('multi-field-name').editor as any,
+      process: identityOverrideProcessor,
+      shouldApply: config.shouldApply ? config.shouldApply : () => true,
+      settings: config.settings || {},
+    });
+  }
 }
 
 export interface NestedValueAccess {

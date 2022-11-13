@@ -79,7 +79,7 @@ export const GraphContextMenu: React.FC<GraphContextMenuProps> = ({
         seriesColor={source.series.color}
         displayName={source.series.alias || source.series.label}
         displayValue={value}
-        labels={source.series}
+        metadataFields={source.series}
       />
     );
   };
@@ -110,13 +110,13 @@ export const GraphContextMenuHeader = ({
   seriesColor,
   displayName,
   displayValue,
-  labels,
+  metadataFields,
 }: {
   timestamp: string;
   seriesColor: string;
   displayName: string;
   displayValue: FormattedValue;
-  labels?: string[];
+  metadataFields?: FormattedValue[];
 }) => {
   const styles = useStyles2(getStyles);
 
@@ -131,18 +131,13 @@ export const GraphContextMenuHeader = ({
         {displayValue && <FormattedValueDisplay value={displayValue} />}
       </HorizontalGroup>
       <div onClick={(e) => e.stopPropagation()}>
-        {labels?.map((label, i) => {
-          return <JSONFormatter key={i} json={JSON.parse(label)} />;
-          //return  (<JSONFormatter key={i} open={2} json={JSON.parse(`{
-          //   "version": "2.0.0",
-          //   "tasks": [
-          //       {
-          //           "label": "echo",
-          //           "type": "shell",
-          //           "command": "echo Hello"
-          //         }
-          //       ]
-          //     }`)}/>)
+        {metadataFields?.map((field, i) => {
+          return (
+            <HorizontalGroup key={i}>
+              <span className={styles.displayName}>{field.prefix}</span>
+              <JSONFormatter json={JSON.parse(field.text)} />
+            </HorizontalGroup>
+          );
         })}
       </div>
     </div>

@@ -30,6 +30,7 @@ export function prepareGraphableFields(
 
   for (let frame of series) {
     const fields: Field[] = [];
+    const metadataFields: Field[] = [];
 
     let hasTimeField = false;
     let hasValueField = false;
@@ -41,6 +42,24 @@ export function prepareGraphableFields(
     });
 
     for (const field of nullToValue(nulledFrame).fields) {
+      if (field.config.custom.metadataFields.includes(field.name)) {
+        const custom: GraphFieldConfig = field.config?.custom ?? {};
+        custom.hideFrom = {
+          legend: true,
+          viz: true,
+          tooltip: true,
+        };
+        const config = {
+          ...field.config,
+          custom,
+        };
+        copy = {
+          ...field,
+          config: config,
+        };
+
+        metadataFields.push(copy);
+      }
       switch (field.type) {
         case FieldType.time:
           hasTimeField = true;
@@ -98,16 +117,6 @@ export function prepareGraphableFields(
 
           fields.push(copy);
           break;
-        default:
-          if (field.config.custom.labels.includes(field.name)) {
-            for (const f of nullToValue(nulledFrame).fields) {
-              f.config.custom.metadata = field;
-            }
-            for (const f of fields) {
-              f.config.custom.metadata = field;
-            }
-          }
-          break;
       }
     }
 
@@ -116,6 +125,7 @@ export function prepareGraphableFields(
         ...frame,
         length: nulledFrame.length,
         fields,
+        metadataFields,
       });
     }
   }

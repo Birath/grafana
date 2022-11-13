@@ -123,6 +123,12 @@ HideableFieldConfig: {
 } @cuetsy(kind="interface")
 
 // TODO docs
+MetadataFieldConfig: {
+	showMetadata?: bool
+	metadataFields?: [...string]
+} @cuetsy(kind="interface")
+
+// TODO docs
 GraphTresholdsStyleMode: "off" | "line" | "dashed" | "area" | "line+area" | "dashed+area" | "series" @cuetsy(kind="enum",memberNames="Off|Line|Dashed|Area|LineAndArea|DashedAndArea|Series")
 
 // TODO docs
@@ -227,12 +233,11 @@ GraphFieldConfig: {
 	BarConfig
 	StackableFieldConfig
 	HideableFieldConfig
+	MetadataFieldConfig
 	drawStyle?:       GraphDrawStyle
 	gradientMode?:    GraphGradientMode
 	thresholdsStyle?: GraphThresholdsStyleConfig
 	transform?:       GraphTransform
-	showLabels?:      bool
-	labels?: 		  [...string]
 } @cuetsy(kind="interface")
 
 // TODO docs
@@ -266,6 +271,4 @@ TableFieldOptions: {
 VizTooltipOptions: {
 	mode: TooltipDisplayMode
 	sort: SortOrder
-	showLabels?: bool
-	labels?: [...string]
 } @cuetsy(kind="interface")

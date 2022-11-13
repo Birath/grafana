@@ -230,6 +230,18 @@ export interface HideableFieldConfig {
 /**
  * TODO docs
  */
+export interface MetadataFieldConfig {
+  metadataFields?: Array<string>;
+  showMetadata?: boolean;
+}
+
+export const defaultMetadataFieldConfig: Partial<MetadataFieldConfig> = {
+  metadataFields: [],
+};
+
+/**
+ * TODO docs
+ */
 export enum GraphTresholdsStyleMode {
   Area = 'area',
   Dashed = 'dashed',
@@ -438,18 +450,12 @@ export enum SortOrder {
 /**
  * TODO docs
  */
-export interface GraphFieldConfig extends LineConfig, FillConfig, PointsConfig, AxisConfig, BarConfig, StackableFieldConfig, HideableFieldConfig {
+export interface GraphFieldConfig extends LineConfig, FillConfig, PointsConfig, AxisConfig, BarConfig, StackableFieldConfig, HideableFieldConfig, MetadataFieldConfig {
   drawStyle?: GraphDrawStyle;
   gradientMode?: GraphGradientMode;
-  labels?: Array<string>;
-  showLabels?: boolean;
   thresholdsStyle?: GraphThresholdsStyleConfig;
   transform?: GraphTransform;
 }
-
-export const defaultGraphFieldConfig: Partial<GraphFieldConfig> = {
-  labels: [],
-};
 
 /**
  * TODO docs
@@ -502,12 +508,6 @@ export const defaultTableFieldOptions: Partial<TableFieldOptions> = {
  * TODO docs
  */
 export interface VizTooltipOptions {
-  labels?: Array<string>;
   mode: TooltipDisplayMode;
-  showLabels?: boolean;
   sort: SortOrder;
 }
-
-export const defaultVizTooltipOptions: Partial<VizTooltipOptions> = {
-  labels: [],
-};
